@@ -50,5 +50,4 @@ describe "url" do
     Domainatrix::Url.new(:domain => "foo", :public_suffix => "co.uk" ).domain_with_tld.should == "foo.co.uk"
     Domainatrix::Url.new(:subdomain => "baz", :domain => "bar", :public_suffix => "com").domain_with_tld.should == "bar.com"
   end
-
 end

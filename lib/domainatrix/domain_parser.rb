@@ -37,12 +37,16 @@ module Domainatrix
       else
         path = uri.path
       end
-      parse_domains_from_host(uri.host).merge({
+      domain_info = {
         :scheme => uri.scheme,
         :host   => uri.host,
         :path   => path,
         :url    => url
-      })
+      }
+      if ! is_ip_address?(uri.host)
+        domain_info.merge!(parse_domains_from_host(uri.host))
+      end
+      domain_info
     end
 
     def parse_domains_from_host(host)
@@ -51,6 +55,7 @@ module Domainatrix
       domain = ""
       subdomains = []
       sub_hash = @public_suffixes
+
       parts.each_index do |i|
         part = parts[i]
 
@@ -73,5 +78,11 @@ module Domainatrix
       end
       {:public_suffix => public_suffix.reverse.join("."), :domain => domain, :subdomain => subdomains.reverse.join(".")}
     end
+    
+    private
+    
+      def is_ip_address?(host)
+        host =~ /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
+      end
   end
 end

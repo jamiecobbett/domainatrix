@@ -67,5 +67,12 @@ describe "domain parser" do
       @domain_parser.parse("http://foo.pauldix.net")[:subdomain].should == "foo"
       @domain_parser.parse("http://bar.foo.pauldix.co.uk")[:subdomain].should == "bar.foo"
     end
+    
+    it "treats an IPv4 address as a domain/host" do
+      @domain_parser.parse("http://64.171.10.183")[:domain].should == "64.171.10.183"
+      @domain_parser.parse("http://64.171.10.183")[:host].should == "64.171.10.183"
+      @domain_parser.parse("http://64.171.10.183")[:subdomain].should == nil
+      @domain_parser.parse("http://64.171.10.183")[:public_suffix].should == nil
+    end
   end
 end
